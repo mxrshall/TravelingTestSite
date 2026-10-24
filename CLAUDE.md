@@ -20,6 +20,8 @@ Follow these steps exactly when you are running as the scheduled morning agent.
 1. **Find work.** List open issues labelled `agent` (see `docs/agents/issue-tracker.md`), oldest first.
    Skip any issue that also has `agent-in-progress`, `needs-info`, or `ready-for-human`,
    and skip any issue that already has an open PR whose body says `Closes #<n>`.
+   Also skip any issue whose body says `Depends on #<m>` while issue #<m> is still open
+   (its PR isn't merged yet, so `main` doesn't have the code it builds on).
    If nothing is left, stop and report "No agent issues today."
 2. **Pick at most ONE issue** per run. Add the `agent-in-progress` label to it.
 3. **Check it is clear enough.** Read the issue and its comments. If the expected behaviour is
