@@ -3,6 +3,16 @@
 Test repository for an automated "morning agent": every morning Claude picks up GitHub issues
 labelled `agent`, implements them, and opens a pull request for a human to review.
 
+## Project
+
+React 19 + Vite + Tailwind CSS v4 (via `@tailwindcss/vite`). Tests use Vitest + React Testing Library (jsdom).
+
+- Install: `npm install`
+- Test: `npm test`
+- Build: `npm run build`
+
+Put components in `src/`, with tests next to them as `*.test.jsx`. Style with Tailwind classes, not separate CSS files.
+
 ## Morning agent workflow
 
 Follow these steps exactly when you are running as the scheduled morning agent.
@@ -14,13 +24,14 @@ Follow these steps exactly when you are running as the scheduled morning agent.
 2. **Pick at most ONE issue** per run. Add the `agent-in-progress` label to it.
 3. **Check it is clear enough.** Read the issue and its comments. If the expected behaviour is
    ambiguous, do not guess: comment with your specific questions, remove `agent`, add `needs-info`, and stop.
-4. **Branch.** `git checkout -b claude/issue-<n>-<short-slug>` from an up-to-date `main`.
-5. **Implement test-first** with the `tdd` skill. Use the `diagnosing-bugs` skill when the issue is a bug.
+4. **Set up.** Run `npm install`. If it fails, report it on the issue and stop.
+5. **Branch.** `git checkout -b claude/issue-<n>-<short-slug>` from an up-to-date `main`.
+6. **Implement test-first** with the `tdd` skill. Use the `diagnosing-bugs` skill when the issue is a bug.
    Keep the change as small as the issue needs; don't refactor unrelated code.
-6. **Verify.** Run the full test suite and any lint/build commands that exist. Everything must pass.
+7. **Verify.** Run the full test suite and any lint/build commands that exist. Everything must pass.
    If you can't make it pass, push what you have, open the PR as a draft and explain what is failing.
-7. **Open a pull request** against `main`. Write the body with the `pr` skill and include `Closes #<n>`.
-8. **Comment on the issue** with a link to the PR and a two-line summary.
+8. **Open a pull request** against `main`. Write the body with the `pr` skill and include `Closes #<n>`.
+9. **Comment on the issue** with a link to the PR and a two-line summary.
 
 ### Hard rules
 
