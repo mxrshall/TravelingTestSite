@@ -1,8 +1,20 @@
+import Destinations from './Destinations.jsx'
+import Footer from './Footer.jsx'
+import Hero from './Hero.jsx'
+import JourneyBand from './JourneyBand.jsx'
+import Nav from './Nav.jsx'
+
 function App() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-sky-50">
-      <h1 className="text-4xl font-bold text-sky-900">Hello World</h1>
-    </main>
+    <div className="min-h-screen bg-purple-950 text-white">
+      <Nav />
+      <main>
+        <Hero />
+        <Destinations />
+        <JourneyBand />
+      </main>
+      <Footer />
+    </div>
   )
 }
 
