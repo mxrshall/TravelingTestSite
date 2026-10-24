@@ -40,6 +40,12 @@ Issues are tracked in GitHub Issues; use `gh api` (REST), not `gh issue`/`gh pr`
 
 Default triage roles, except "ready for agent" is the existing `agent` label. See `docs/agents/triage-labels.md`.
 
+### Interactive skills (only when a human is chatting)
+
+- `/grill-me` (uses `grilling`): Claude interviews you question by question to sharpen a plan, an issue or a bug diagnosis before any code is written.
+  It waits for your answers, so never use it in the unattended morning run.
+  Typical use: `/grill-me` on an issue, then turn the agreed result into a clear issue labelled `agent`.
+
 ### Domain docs
 
 Single-context. See `docs/agents/domain.md`.
