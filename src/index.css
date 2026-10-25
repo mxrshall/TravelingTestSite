@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* keep section headings clear of the fixed nav */
+    scroll-padding-top: 4.5rem;
+  }
+}
