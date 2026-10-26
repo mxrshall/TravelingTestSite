@@ -1,3 +1,4 @@
+import { useMotionValueEvent, useScroll } from 'motion/react'
 import { useState } from 'react'
 
 const links = [
@@ -10,9 +11,19 @@ const linkClass = 'font-medium text-purple-100 transition hover:text-orange-300'
 
 function Nav() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [solid, setSolid] = useState(false)
+  const { scrollY } = useScroll()
+
+  // The hero is one screen tall: go solid once it has scrolled out from under the nav.
+  useMotionValueEvent(scrollY, 'change', (y) => setSolid(y > window.innerHeight - 72))
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-purple-950/90 backdrop-blur">
+    <header
+      data-nav-solid={solid || menuOpen}
+      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
+        solid || menuOpen ? 'bg-purple-950/95 shadow-lg shadow-orange-500/10 backdrop-blur' : 'bg-transparent'
+      }`}
+    >
       <nav className="mx-auto max-w-6xl px-4 py-4 sm:px-8">
         <div className="flex items-center justify-between">
           <a href="#hero" className="text-xl font-extrabold tracking-tight text-orange-300">

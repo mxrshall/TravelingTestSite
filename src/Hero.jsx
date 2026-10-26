@@ -1,3 +1,6 @@
+import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
+import { useRef } from 'react'
+
 // Back-to-front mountain silhouettes; each is its own layer so it can move independently.
 const mountains = [
   {
@@ -20,18 +23,36 @@ const mountains = [
   },
 ]
 
+// How far (px) each layer travels over the hero's scroll; sky slowest, foreground fastest.
+const travel = { sky: 60, far: 120, near: 200, foreground: 300 }
+
 function Hero() {
+  const ref = useRef(null)
+  const reduceMotion = useReducedMotion()
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
+  const layerY = {
+    sky: useTransform(scrollYProgress, [0, 1], [0, travel.sky]),
+    far: useTransform(scrollYProgress, [0, 1], [0, travel.far]),
+    near: useTransform(scrollYProgress, [0, 1], [0, travel.near]),
+    foreground: useTransform(scrollYProgress, [0, 1], [0, travel.foreground]),
+  }
+  const titleY = useTransform(scrollYProgress, [0, 1], [0, -120])
+  const titleOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0.2])
+  const layerStyle = (layer) => (reduceMotion ? undefined : { y: layerY[layer] })
+
   return (
-    <section id="hero" className="relative flex h-screen items-center justify-center overflow-hidden">
-      <div
+    <section ref={ref} id="hero" className="relative flex h-screen items-center justify-center overflow-hidden">
+      <motion.div
         data-layer="sky"
-        className="absolute inset-0 bg-gradient-to-b from-indigo-900 via-pink-500 to-orange-300"
+        style={layerStyle('sky')}
+        className="absolute -inset-x-0 -top-16 bottom-0 bg-gradient-to-b from-indigo-900 via-pink-500 to-orange-300"
       >
         <div className="absolute left-1/2 top-[45%] h-40 w-40 -translate-x-1/2 rounded-full bg-amber-200 opacity-90 blur-[2px] sm:h-56 sm:w-56" />
-      </div>
+      </motion.div>
       {mountains.map(({ layer, fill, height, path }) => (
-        <svg
+        <motion.svg
           key={layer}
+          style={layerStyle(layer)}
           data-layer={layer}
           aria-hidden="true"
           viewBox="0 0 1440 320"
@@ -39,16 +60,19 @@ function Hero() {
           className={`absolute inset-x-0 bottom-0 w-full ${height} ${fill}`}
         >
           <path d={path} />
-        </svg>
+        </motion.svg>
       ))}
-      <div className="relative z-10 -mt-24 px-4 text-center">
+      <motion.div
+        style={reduceMotion ? undefined : { y: titleY, opacity: titleOpacity }}
+        className="relative z-10 -mt-24 px-4 text-center"
+      >
         <h1 className="text-5xl font-extrabold tracking-tight text-white drop-shadow-lg sm:text-7xl">
           Travelsite
         </h1>
         <p className="mt-4 text-lg text-orange-50 drop-shadow sm:text-2xl">
           Discover the world's most breathtaking places
         </p>
-      </div>
+      </motion.div>
     </section>
   )
 }
