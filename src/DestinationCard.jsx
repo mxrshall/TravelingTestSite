@@ -1,6 +1,8 @@
-function DestinationCard({ name, country, blurb, image }) {
+import Reveal from './Reveal.jsx'
+
+function DestinationCard({ name, country, blurb, image, delay }) {
   return (
-    <article className="overflow-hidden rounded-2xl bg-purple-900/60 shadow-lg ring-1 ring-white/10">
+    <Reveal as="article" delay={delay} className="overflow-hidden rounded-2xl bg-purple-900/60 shadow-lg ring-1 ring-white/10">
       {image ? (
         <img src={image} alt={`${name}, ${country}`} className="aspect-[4/3] w-full object-cover" />
       ) : (
@@ -14,7 +16,7 @@ function DestinationCard({ name, country, blurb, image }) {
         <p className="text-sm font-medium uppercase tracking-wide text-orange-300">{country}</p>
         <p className="mt-2 text-purple-100">{blurb}</p>
       </div>
-    </article>
+    </Reveal>
   )
 }
 
