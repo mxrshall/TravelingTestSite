@@ -36,8 +36,8 @@ describe('App', () => {
       const hrefs = within(nav)
         .getAllByRole('link')
         .map((link) => link.getAttribute('href'))
-      expect(hrefs).toEqual(expect.arrayContaining(['#destinations', '#journey', '#contact']))
-      for (const href of hrefs) {
+      expect(hrefs).toEqual(expect.arrayContaining(['#destinations', '#journey', '#/contact']))
+      for (const href of hrefs.filter((h) => !h.startsWith('#/'))) {
         expect(container.querySelector(href)).not.toBeNull()
       }
     })
