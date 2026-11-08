@@ -28,11 +28,15 @@ Follow these steps exactly when you are running as the scheduled morning agent.
    ambiguous, do not guess: comment with your specific questions, remove `agent`, add `needs-info`, and stop.
 4. **Set up.** Run `npm install`. If it fails, report it on the issue and stop.
 5. **Branch.** `git checkout -b claude/issue-<n>-<short-slug>` from an up-to-date `main`.
-6. **Implement test-first** with the `tdd` skill. Use the `diagnosing-bugs` skill when the issue is a bug.
+6. **Implement, test and review with the `dev-loop` skill**, passing it the issue number. It runs the
+   `implementer` subagent (test-first with `tdd`, `diagnosing-bugs` for bugs) → `tester` subagent →
+   `code-review` skill, and loops back to the implementer on failures or blocking findings (max 3 rounds).
    Keep the change as small as the issue needs; don't refactor unrelated code.
-7. **Verify.** Run the full test suite and any lint/build commands that exist. Everything must pass.
-   If you can't make it pass, push what you have, open the PR as a draft and explain what is failing.
+7. **Verify.** Run `npm test` and `npm run build` yourself once more. Everything must pass and dev-loop must
+   have ended with `DONE`. If not, push what you have, open the PR as a draft and explain what is failing
+   (use dev-loop's `UNRESOLVED` section).
 8. **Open a pull request** against `main`. Write the body with the `pr` skill and include `Closes #<n>`.
+   Add dev-loop's rounds, tests and non-blocking review notes to the body.
 9. **Comment on the issue** with a link to the PR and a two-line summary.
 
 ### Hard rules
@@ -52,6 +56,14 @@ Issues are tracked in GitHub Issues; use `gh api` (REST), not `gh issue`/`gh pr`
 ### Triage labels
 
 Default triage roles, except "ready for agent" is the existing `agent` label. See `docs/agents/triage-labels.md`.
+
+### Subagents and the dev loop
+
+- `.claude/agents/implementer.md`: writes the code test-first and commits to the feature branch. Never pushes.
+- `.claude/agents/tester.md`: independent QA; checks acceptance criteria, adds missing tests, runs tests and build. Never edits production code.
+- `.claude/skills/dev-loop/`: the orchestrator. Runs implementer → tester → `code-review` and loops back on failures (max 3 rounds).
+  Subagents can't start other subagents, so dev-loop always runs in the main session.
+- A human can run the same loop interactively: `/dev-loop #12` or `/dev-loop <task description>`.
 
 ### Interactive skills (only when a human is chatting)
 
