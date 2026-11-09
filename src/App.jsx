@@ -7,6 +7,14 @@ import Hero from './Hero.jsx'
 import JourneyBand from './JourneyBand.jsx'
 import Nav from './Nav.jsx'
 
+function safeDecode(value) {
+  try {
+    return decodeURIComponent(value)
+  } catch {
+    return ''
+  }
+}
+
 function App() {
   const [hash, setHash] = useState(() => window.location.hash)
   useEffect(() => {
@@ -18,17 +26,17 @@ function App() {
     return () => window.removeEventListener('hashchange', onChange)
   }, [])
   const onContact = hash === '#/contact'
-  const destinationMatch = hash.match(/^#\/destination\/(.+)$/)
+  const destinationMatch = hash.match(/^#\/destination\/(.+?)\/?$/)
   const onSubpage = onContact || destinationMatch !== null
 
   return (
     <div className="min-h-screen bg-purple-950 text-white">
-      <Nav onContactPage={onSubpage} />
+      <Nav onSubpage={onSubpage} />
       <main>
         {onContact ? (
           <ContactPage />
         ) : destinationMatch ? (
-          <DestinationPage slug={decodeURIComponent(destinationMatch[1])} />
+          <DestinationPage slug={safeDecode(destinationMatch[1])} />
         ) : (
           <>
             <Hero />

@@ -39,6 +39,18 @@ describe('destination routing', () => {
     expect(screen.getByRole('region', { name: 'Featured destinations' })).toBeInTheDocument()
   })
 
+  it('shows not-found instead of crashing on a malformed hash', () => {
+    render(<App />)
+    go('#/destination/%E0%A4%A')
+    expect(screen.getByRole('heading', { name: /destination not found/i })).toBeInTheDocument()
+  })
+
+  it('accepts a trailing slash after the slug', () => {
+    render(<App />)
+    go('#/destination/kyoto/')
+    expect(screen.getByRole('heading', { level: 1, name: 'Kyoto' })).toBeInTheDocument()
+  })
+
   it('shows not-found inside the app for an unknown slug', () => {
     render(<App />)
     go('#/destination/atlantis')
