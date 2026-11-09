@@ -1,6 +1,6 @@
 import Reveal from './Reveal.jsx'
 
-function DestinationCard({ name, country, blurb, image, delay }) {
+function DestinationCard({ name, country, blurb, image, slug, delay }) {
   return (
     <Reveal as="article" delay={delay} className="overflow-hidden rounded-2xl bg-purple-900/60 shadow-lg ring-1 ring-white/10">
       {image ? (
@@ -15,6 +15,13 @@ function DestinationCard({ name, country, blurb, image, delay }) {
         <h3 className="text-xl font-bold text-white">{name}</h3>
         <p className="text-sm font-medium uppercase tracking-wide text-orange-300">{country}</p>
         <p className="mt-2 text-purple-100">{blurb}</p>
+        <a
+          href={`#/destination/${slug}`}
+          aria-label={`Explore ${name}, ${country}`}
+          className="mt-4 inline-block font-medium text-orange-300 transition hover:text-orange-200"
+        >
+          Explore →
+        </a>
       </div>
     </Reveal>
   )

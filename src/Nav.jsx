@@ -9,19 +9,19 @@ const links = [
 
 const linkClass = 'font-medium text-purple-100 transition hover:text-orange-300'
 
-function Nav({ onContactPage = false }) {
+function Nav({ onSubpage = false }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [solid, setSolid] = useState(false)
   // Section anchors only exist on the homepage; from the contact page they lead back home.
   const navLinks = links.map((link) =>
-    onContactPage && !link.href.startsWith('#/') ? { ...link, href: '#/' } : link,
+    onSubpage && !link.href.startsWith('#/') ? { ...link, href: '#/' } : link,
   )
   const { scrollY } = useScroll()
 
   // The hero is one screen tall: go solid once it has scrolled out from under the nav.
   useMotionValueEvent(scrollY, 'change', (y) => setSolid(y > window.innerHeight - 72))
 
-  const isSolid = solid || menuOpen || onContactPage
+  const isSolid = solid || menuOpen || onSubpage
 
   return (
     <header
@@ -32,12 +32,12 @@ function Nav({ onContactPage = false }) {
     >
       <nav className="mx-auto max-w-6xl px-4 py-4 sm:px-8">
         <div className="flex items-center justify-between">
-          <a href={onContactPage ? '#/' : '#hero'} className="text-xl font-extrabold tracking-tight text-orange-300">
+          <a href={onSubpage ? '#/' : '#hero'} className="text-xl font-extrabold tracking-tight text-orange-300">
             Travelsite
           </a>
           <ul className="hidden gap-8 sm:flex">
             {navLinks.map(({ href, label }) => (
-              <li key={href}>
+              <li key={label}>
                 <a href={href} className={linkClass}>
                   {label}
                 </a>
@@ -60,7 +60,7 @@ function Nav({ onContactPage = false }) {
         {menuOpen && (
           <ul id="mobile-menu" aria-label="Mobile menu" className="flex flex-col gap-4 pb-2 pt-4 sm:hidden">
             {navLinks.map(({ href, label }) => (
-              <li key={href}>
+              <li key={label}>
                 <a href={href} onClick={() => setMenuOpen(false)} className={linkClass}>
                   {label}
                 </a>
