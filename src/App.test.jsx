@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from '@testing-library/react'
+import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import App from './App.jsx'
 
 describe('App', () => {
@@ -27,6 +27,25 @@ describe('App', () => {
     const band = container.querySelector('#journey')
     expect(within(band).getByText(/the world is a book/i)).toBeInTheDocument()
     expect(within(band).getByRole('link', { name: 'Start your journey' })).toHaveAttribute('href', '#destinations')
+  })
+
+  describe('destination page', () => {
+    afterEach(() => {
+      window.location.hash = ''
+    })
+
+    it('opens the destination page from a card link on hash change', () => {
+      render(<App />)
+      const link = screen.getByRole('link', { name: 'Explore Kyoto, Japan' })
+      act(() => {
+        window.location.hash = link.getAttribute('href')
+        window.dispatchEvent(new HashChangeEvent('hashchange'))
+      })
+      expect(screen.getByRole('heading', { level: 1, name: 'Kyoto' })).toBeInTheDocument()
+      expect(screen.queryByRole('region', { name: 'Featured destinations' })).not.toBeInTheDocument()
+      const nav = screen.getByRole('navigation')
+      expect(within(nav).getByRole('link', { name: 'Destinations' })).toHaveAttribute('href', '#/')
+    })
   })
 
   describe('nav', () => {

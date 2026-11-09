@@ -37,7 +37,7 @@ function Nav({ onContactPage = false }) {
           </a>
           <ul className="hidden gap-8 sm:flex">
             {navLinks.map(({ href, label }) => (
-              <li key={href}>
+              <li key={label}>
                 <a href={href} className={linkClass}>
                   {label}
                 </a>
@@ -60,7 +60,7 @@ function Nav({ onContactPage = false }) {
         {menuOpen && (
           <ul id="mobile-menu" aria-label="Mobile menu" className="flex flex-col gap-4 pb-2 pt-4 sm:hidden">
             {navLinks.map(({ href, label }) => (
-              <li key={href}>
+              <li key={label}>
                 <a href={href} onClick={() => setMenuOpen(false)} className={linkClass}>
                   {label}
                 </a>

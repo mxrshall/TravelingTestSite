@@ -16,3 +16,10 @@ describe('DestinationCard', () => {
     expect(screen.queryByTestId('image-placeholder')).not.toBeInTheDocument()
   })
 })
+
+describe('DestinationCard link', () => {
+  it('links to the destination page', () => {
+    render(<DestinationCard {...kyoto} slug="kyoto" />)
+    expect(screen.getByRole('link', { name: 'Explore Kyoto, Japan' })).toHaveAttribute('href', '#/destination/kyoto')
+  })
+})
